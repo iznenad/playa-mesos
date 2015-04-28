@@ -58,9 +58,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.vmx['memsize'] = pmconf.vm_ram
     v.vmx['numvcpus'] = pmconf.vm_cpus
   end
-
+  config.vm.network :forwarded_port, guest: 22, host: 1234
   # Make the project root available to the guest VM.
-  # config.vm.synced_folder '.', '/vagrant'
+  config.vm.synced_folder './framework','/home/vagrant/framework', id: "mesos-ramework",
+    owner: "vagrant",
+    mount_options: ["dmode=775,fmode=664"]
 
   # Only provision if explicitly request with 'provision' or 'up --provision'
   if ARGV.any? { |arg| arg =~ /^(--)?provision$/ }
